@@ -1,3 +1,7 @@
+# A TDD Exercise to calculate the score for a game of bowling
+
+## Credit to https://cyber-dojo.org/ for the exercise and the rest of this readme.
+
 Write a program to score a game of Ten-Pin Bowling.
 
 Input: string (described below) representing a bowling game
