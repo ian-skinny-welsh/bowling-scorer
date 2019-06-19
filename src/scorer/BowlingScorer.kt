@@ -13,9 +13,10 @@ class BowlingScorer {
     fun calculateGameScore(scoreStr: String): Int {
         var frames: List<String> = splitIntoFrames(scoreStr)
         val frameCount: Int = frames.size - 1
-        var score: Int = 0
+        var score = 0
+
         for (i in 1..frameCount) {
-            score += calculateFrameScore(frames, i == frameCount)
+            score += calculateFrameScore(frames)
             frames = frames.drop(1)
         }
         return score
@@ -25,16 +26,15 @@ class BowlingScorer {
         return scoreStr.split("||","|")
     }
 
-    fun calculateFrameScore(frames: List<String>, lastFrame: Boolean = false): Int {
+    fun calculateFrameScore(frames: List<String>): Int {
         val thisFrame = frames.first()
-        val frameType = getFrameType(thisFrame)
 
-        return when (frameType) {
-            SIMPLE_FRAME -> returnHighestPinCount(thisFrame)
+        return when (getFrameType(thisFrame)) {
+            SIMPLE_FRAME -> sumBothBalls(thisFrame)
 
             SPARE_FRAME -> sumFrameWithSpare(frames.drop(1).first())
 
-            STRIKE_FRAME -> sumStrike(frames.drop(1).take(2), lastFrame)
+            STRIKE_FRAME -> sumStrike(frames.drop(1).take(2))
         }
     }
 
@@ -42,12 +42,8 @@ class BowlingScorer {
         return FrameType.values().first { fType -> fType.isThisType(frameStr) }
     }
 
-    fun returnHighestPinCount(twoBalls: String): Int {
-        return if(twoBalls.last() == MISS) {
-                getScoreForBall(twoBalls.first())
-            } else {
-                getScoreForBall(twoBalls.last())
-            }
+    fun sumBothBalls(twoBalls: String): Int {
+        return getScoreForBall(twoBalls.first()) + getScoreForBall(twoBalls.last())
     }
 
     fun getScoreForBall(ball: Char): Int {
@@ -63,22 +59,20 @@ class BowlingScorer {
         return SPARE_SCORE + getScoreForBall(twoBalls.first())
     }
 
-    fun sumStrike(next2Frames: List<String>, lastFrame: Boolean): Int {
+    fun sumStrike(next2Frames: List<String>): Int {
         val nextFrame = next2Frames.first()
-        return when(nextFrame.length) {
-            2 -> STRIKE_SCORE + sumTwoExtraBalls(nextFrame, lastFrame)
+        return when {
+            nextFrame.length == 2 -> STRIKE_SCORE + sumTwoExtraBalls(nextFrame)
             else -> STRIKE_SCORE + getScoreForBall(nextFrame.first()) + getScoreForBall(next2Frames.last().first())
         }
     }
 
-    fun sumTwoExtraBalls (twoBalls: String, lastFrame: Boolean): Int {
+    fun sumTwoExtraBalls (twoBalls: String): Int {
 
         return when {
-            lastFrame -> getScoreForBall(twoBalls.first()) + getScoreForBall(twoBalls.last())
+            SPARE_FRAME.isThisType(twoBalls) -> SPARE_SCORE
 
-            SIMPLE_FRAME.isThisType(twoBalls) -> returnHighestPinCount(twoBalls)
-
-            else -> SPARE_SCORE
+            else -> sumBothBalls(twoBalls)
         }
     }
 }

@@ -25,15 +25,15 @@ class BowlingScorerTest : StringSpec({
 
     "the score for a simple frame should be the sum of the pins" {
         forall(
-            row("--|--|--|--|--|--|--|--|--|--||", 0, false),
-            row("1-|--|--|--|--|--|--|--|--|--||", 1, false),
-            row("-1|--|--|--|--|--|--|--|--|--||", 1, false),
-            row("2-|--|--|--|--|--|--|--||", 2, false),
-            row("-9|--|--||", 9, false),
-            row("29|--||", 9, false),
-            row("X||51", 16, true)
-        ) { testData, expected, lastFrame->
-            testee.calculateFrameScore(testee.splitIntoFrames(testData), lastFrame) shouldBe expected
+            row("--|--|--|--|--|--|--|--|--|--||", 0),
+            row("1-|--|--|--|--|--|--|--|--|--||", 1),
+            row("-1|--|--|--|--|--|--|--|--|--||", 1),
+            row("2-|--|--|--|--|--|--|--||", 2),
+            row("-9|--|--||", 9),
+            row("25|--||", 7),
+            row("X||51", 16)
+        ) { testData, expected ->
+            testee.calculateFrameScore(testee.splitIntoFrames(testData)) shouldBe expected
         }
     }
 
@@ -52,19 +52,19 @@ class BowlingScorerTest : StringSpec({
 
     "the score for a strike frame should be 10 plus the next two balls" {
         forall(
-            row("X|--|--|--|--|--|--|--|--|--||", 10, false),
-            row("X|3-|--|--|--|--|--|--|--|--||", 13, false),
-            row("X|-5|--|--|--|--|--|--|--|--||", 15, false),
-            row("X|15|--|--|--|--|--|--|--|--||", 15, false),
-            row("X|4/|--|--|--|--|--|--|--|--||", 20, false),
-            row("X|X|--|--|--|--|--|--|--|--||", 20, false),
-            row("X|X|4-|--|--|--|--|--|--|--||", 24, false),
-            row("X|X|X|--|--|--|--|--|--|--||", 30, false),
-            row("X||36", 19, true),
-            row("X||X3", 23, true),
-            row("X||XX", 30, true)
-        ) { testData, expected, lastFrame ->
-            testee.calculateFrameScore(testee.splitIntoFrames(testData), lastFrame) shouldBe expected
+            row("X|--|--|--|--|--|--|--|--|--||", 10),
+            row("X|3-|--|--|--|--|--|--|--|--||", 13),
+            row("X|-5|--|--|--|--|--|--|--|--||", 15),
+            row("X|15|--|--|--|--|--|--|--|--||", 16),
+            row("X|4/|--|--|--|--|--|--|--|--||", 20),
+            row("X|X|--|--|--|--|--|--|--|--||", 20),
+            row("X|X|4-|--|--|--|--|--|--|--||", 24),
+            row("X|X|X|--|--|--|--|--|--|--||", 30),
+            row("X||36", 19),
+            row("X||X3", 23),
+            row("X||XX", 30)
+        ) { testData, expected ->
+            testee.calculateFrameScore(testee.splitIntoFrames(testData)) shouldBe expected
         }
     }
 })
