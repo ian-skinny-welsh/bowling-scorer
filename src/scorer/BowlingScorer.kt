@@ -55,8 +55,8 @@ class BowlingScorer {
         }
     }
 
-    fun sumFrameWithSpare(twoBalls: String): Int {
-        return SPARE_SCORE + getScoreForBall(twoBalls.first())
+    fun sumFrameWithSpare(nextFrame: String): Int {
+        return SPARE_SCORE + getScoreForBall(nextFrame.first())
     }
 
     fun sumStrike(next2Frames: List<String>): Int {
@@ -68,7 +68,6 @@ class BowlingScorer {
     }
 
     fun sumTwoExtraBalls (twoBalls: String): Int {
-
         return when {
             SPARE_FRAME.isThisType(twoBalls) -> SPARE_SCORE
 
